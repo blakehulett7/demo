@@ -40,7 +40,8 @@ func FindMatches(entity int, targets []int) int {
 		return 0
 	}
 
-	for _, target := range targets {
+	best_match := 0
+	for i, target := range targets {
 		k1 := entity
 		k2 := target
 
@@ -51,6 +52,32 @@ func FindMatches(entity int, targets []int) int {
 
 		composite_key := fmt.Sprintf("%d-%d", k1, k2)
 		fmt.Printf("Checking composite key: %s\n", composite_key)
+
+		match, found := target_map[composite_key]
+		if !found {
+			fmt.Println("- no match found...")
+			continue
+		}
+
+		fmt.Printf("- Found match: %d\n", match)
+
+		if best_match < match {
+			best_match = match
+			fmt.Printf("- Updating new best match to: %d\n", best_match)
+		}
+
+		fmt.Println()
+		fmt.Println("------Finding Nested Matches------")
+		fmt.Println()
+
+		nested_targets := make([]int, len(targets))
+		copy(nested_targets, targets)
+		nested_targets = slices.Delete(nested_targets, i, i+1)
+		fmt.Printf("Comparing entity %d to targets: %v\n", match, nested_targets)
+		match = FindMatches(match, nested_targets)
+
+		fmt.Println("------End of Nested Matches------")
+		fmt.Println()
 	}
 
 	fmt.Println()
