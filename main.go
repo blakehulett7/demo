@@ -17,37 +17,45 @@ type Entity struct {
 func main() {
 	fmt.Println("Dominus Iesus Christus")
 
-	e1 := Entity{
-		Id: 1,
-	}
+	entities := []int{1, 2, 3, 4, 5}
+	best_match := GetBestMatch(entities)
 
-	e2 := Entity{
-		Id: 2,
-	}
+	fmt.Println(best_match)
+}
 
-	e3 := Entity{
-		Id: 3,
-	}
-
-	e4 := Entity{
-		Id: 4,
-	}
-
-	e5 := Entity{
-		Id: 5,
-	}
-
-	entities := []Entity{e1, e2, e3, e4, e5}
+func GetBestMatch(targets []int) int {
 	best_match := 0
-	for i, e := range entities {
-		match := GetMatchedTargets(i, e, entities)
+	if len(targets) == 0 {
+		return 0
+	}
 
+	current := targets[0]
+
+	for i := 1; i < len(targets); i++ {
+		target := targets[i]
+
+		k1 := current
+		k2 := target
+		if target < current {
+			k1 = target
+			k2 = current
+		}
+
+		composite_key := fmt.Sprintf("%d-%d", k1, k2)
+		fmt.Printf("Checking composite key: %s\n", composite_key)
+
+		match, exists := target_map[composite_key]
+		if !exists {
+			fmt.Println("no match found...")
+			continue
+		}
+
+		fmt.Printf("found match: %d\n", match)
 		if best_match < match {
 			best_match = match
 		}
 	}
 
-	fmt.Println(best_match)
 }
 
 func GetMatchedTargets(current_i int, e Entity, possible_targets []Entity) int {
