@@ -29,10 +29,15 @@ func main() {
 		fmt.Printf("Comparing entity %d to targets %v\n", e, targets)
 		fmt.Println("-----------------------------------")
 
-		_ = FindMatches(e, targets)
+		match := FindMatches(e, targets)
+
+		if best_match < match {
+			best_match = match
+			fmt.Printf("Updating global best match to %d\n", best_match)
+		}
 	}
 
-	fmt.Println(best_match)
+	fmt.Printf("Final Best Match: %d\n", best_match)
 }
 
 func FindMatches(entity int, targets []int) int {
@@ -78,11 +83,16 @@ func FindMatches(entity int, targets []int) int {
 
 		fmt.Println("------End of Nested Matches------")
 		fmt.Println()
+
+		if best_match < match {
+			best_match = match
+			fmt.Printf("-- Updating new best match to: %d\n", best_match)
+		}
 	}
 
 	fmt.Println()
 
-	return 0
+	return best_match
 }
 
 func GetBestMatch(targets []int) int {
