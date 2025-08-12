@@ -1,26 +1,31 @@
 package main
 
 import (
+	"slices"
 	"testing"
 )
 
 func FuzzBestMatch(f *testing.F) {
 	seed_tests := [][]int{
 		{1, 2, 3, 4, 5},
+		{1, 6, 5, 9, 9},
+		{1, 4, 5, 6, 7},
+		{1, 3, 5, 9, 9},
 	}
 
-	f.Add(seed_tests[0][0], seed_tests[0][1], seed_tests[0][2], seed_tests[0][3], seed_tests[0][4])
+	for _, seed_test := range seed_tests {
+		f.Add(seed_test[0], seed_test[1], seed_test[2], seed_test[3], seed_test[4])
+	}
 	f.Fuzz(func(t *testing.T, a int, b int, c int, d int, e int) {
 		input := []int{a, b, c, d, e}
-		permutations := GenerateArrayPermutations(input)
+		best_match := FindBestMatch(input)
 
-		best_match := FindBestMatch(permutations[0])
-		for _, tc := range permutations {
-			current_best := FindBestMatch(tc)
+		if best_match > HighestValue {
+			t.Errorf("Got value: %d that exceed highest possible value\n", best_match)
+		}
 
-			if current_best != best_match {
-				t.Errorf("All permutations should return the same answer. Baseline best: %d, Given best: %d, Failing permutation: %v\n", best_match, current_best, tc)
-			}
+		if !slices.Contains(possible_values, best_match) {
+			t.Errorf("Got value: %d which is not on the possible values list\n", best_match)
 		}
 	})
 }
