@@ -3,12 +3,18 @@ package main
 import (
 	"fmt"
 	"slices"
+	"sort"
 )
 
 var target_map map[string]int = map[string]int{
-	"2-3":  23,
-	"3-5":  35,
-	"4-23": 423,
+	"2-3":       23,
+	"3-5":       35,
+	"4-23":      423,
+	"15-64":     1564,
+	"23-44":     2344,
+	"65-99":     6599,
+	"423-11":    42311,
+	"1564-6599": 15646599,
 }
 
 type Entity struct {
@@ -25,6 +31,8 @@ func main() {
 }
 
 func FindBestMatch(entities []int) int {
+	sort.Ints(entities)
+
 	best_match := 0
 	for i, e := range entities {
 		targets := make([]int, 5)

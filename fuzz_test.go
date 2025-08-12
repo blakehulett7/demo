@@ -19,7 +19,7 @@ func FuzzBestMatch(f *testing.F) {
 			current_best := FindBestMatch(tc)
 
 			if current_best != best_match {
-				t.Errorf("All permutations should return the same answer. Baseline best: %d, Failing permutation: %v\n", best_match, tc)
+				t.Errorf("All permutations should return the same answer. Baseline best: %d, Given best: %d, Failing permutation: %v\n", best_match, current_best, tc)
 			}
 		}
 	})
