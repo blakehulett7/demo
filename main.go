@@ -43,14 +43,10 @@ func FindBestMatch(entities []int) int {
 
 		targets = slices.Delete(targets, 0, i+1)
 
-		//fmt.Printf("Comparing entity %d to targets %v\n", e, targets)
-		//fmt.Println("-----------------------------------")
-
 		match := FindMatches(e, targets)
 
 		if best_match < match {
 			best_match = match
-			//fmt.Printf("Updating global best match to %d\n", best_match)
 		}
 	}
 
@@ -73,41 +69,24 @@ func FindMatches(entity int, targets []int) int {
 		}
 
 		composite_key := fmt.Sprintf("%d-%d", k1, k2)
-		//fmt.Printf("Checking composite key: %s\n", composite_key)
-
 		match, found := target_map[composite_key]
 		if !found {
-			//fmt.Println("- no match found...")
 			continue
 		}
 
-		//fmt.Printf("- Found match: %d\n", match)
-
 		if best_match < match {
 			best_match = match
-			//fmt.Printf("- Updating new best match to: %d\n", best_match)
 		}
-
-		//fmt.Println()
-		//fmt.Println("------Finding Nested Matches------")
-		//fmt.Println()
 
 		nested_targets := make([]int, len(targets))
 		copy(nested_targets, targets)
 		nested_targets = slices.Delete(nested_targets, i, i+1)
-		//fmt.Printf("Comparing entity %d to targets: %v\n", match, nested_targets)
 		match = FindMatches(match, nested_targets)
-
-		//fmt.Println("------End of Nested Matches------")
-		//fmt.Println()
 
 		if best_match < match {
 			best_match = match
-			//fmt.Printf("-- Updating new best match to: %d\n", best_match)
 		}
 	}
-
-	//fmt.Println()
 
 	return best_match
 }
