@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"slices"
 )
 
 var target_map map[string]int = map[string]int{
@@ -41,11 +40,7 @@ func main() {
 	entities := []Entity{e1, e2, e3, e4, e5}
 	best_match := 0
 	for i, e := range entities {
-		entities_copy := make([]Entity, len(entities))
-		copy(entities_copy, entities)
-
-		possible_targets := slices.Delete(entities_copy, i, i+1)
-		match := GetMatchedTargets(e, possible_targets)
+		match := GetMatchedTargets(i, e, entities)
 
 		if best_match < match {
 			best_match = match
@@ -55,10 +50,14 @@ func main() {
 	fmt.Println(best_match)
 }
 
-func GetMatchedTargets(e Entity, possible_targets []Entity) int {
+func GetMatchedTargets(current_i int, e Entity, possible_targets []Entity) int {
 	best_match := 0
 	fmt.Printf("Checking entity %d against possible targets %v\n", e, possible_targets)
 	for i, t := range possible_targets {
+		if i <= current_i {
+			continue
+		}
+
 		fmt.Printf("Checking entity %d against entity %d...\n", e.Id, t.Id)
 
 		targets_copy := make([]Entity, len(possible_targets))
@@ -88,9 +87,17 @@ func GetMatchedTargets(e Entity, possible_targets []Entity) int {
 		}
 
 		matched_e := Entity{Id: match}
-		new_targets := slices.Delete(targets_copy, i, i+1)
 
-		new_match := GetMatchedTargets(matched_e, new_targets)
+		new_targets := []Entity{}
+		for j, new_t := range possible_targets {
+			if j == i || j == current_i {
+				continue
+			}
+
+			new_targets = append(new_targets, new_t)
+		}
+
+		new_match := GetMatchedTargets(0, matched_e, new_targets)
 		if best_match < new_match {
 			best_match = new_match
 		}
