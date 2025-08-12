@@ -15,14 +15,9 @@ var target_map map[string]int = map[string]int{
 	"23-44": 2344,
 	"65-99": 6599,
 }
-
-const HighestValue = 6599
-
 var possible_values = []int{0, 23, 35, 99, 423, 1564, 2344, 6599}
 
-type Entity struct {
-	Id int
-}
+const HighestValue = 6599
 
 func main() {
 	fmt.Println("Dominus Iesus Christus")
