@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"slices"
 )
 
 var target_map map[string]int = map[string]int{
@@ -18,9 +19,43 @@ func main() {
 	fmt.Println("Dominus Iesus Christus")
 
 	entities := []int{1, 2, 3, 4, 5}
-	best_match := GetBestMatch(entities)
+	best_match := 0
+	for i, e := range entities {
+		targets := make([]int, 5)
+		copy(targets, entities)
+
+		targets = slices.Delete(targets, 0, i+1)
+
+		fmt.Printf("Comparing entity %d to targets %v\n", e, targets)
+		fmt.Println("-----------------------------------")
+
+		_ = FindMatches(e, targets)
+	}
 
 	fmt.Println(best_match)
+}
+
+func FindMatches(entity int, targets []int) int {
+	if len(targets) == 0 {
+		return 0
+	}
+
+	for _, target := range targets {
+		k1 := entity
+		k2 := target
+
+		if k2 < k1 {
+			k1 = target
+			k2 = entity
+		}
+
+		composite_key := fmt.Sprintf("%d-%d", k1, k2)
+		fmt.Printf("Checking composite key: %s\n", composite_key)
+	}
+
+	fmt.Println()
+
+	return 0
 }
 
 func GetBestMatch(targets []int) int {
@@ -56,6 +91,7 @@ func GetBestMatch(targets []int) int {
 		}
 	}
 
+	return 0
 }
 
 func GetMatchedTargets(current_i int, e Entity, possible_targets []Entity) int {
