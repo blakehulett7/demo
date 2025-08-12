@@ -22,7 +22,7 @@ const HighestValue = 6599
 func main() {
 	fmt.Println("Dominus Iesus Christus")
 
-	entities := []int{1, 2, 3, 4, 5}
+	entities := []int{1, 5, 9, 9, 65}
 	best_match := FindBestMatch(entities)
 
 	fmt.Println(best_match)
@@ -35,11 +35,9 @@ func FindBestMatch(entities []int) int {
 	for i, e := range entities {
 		targets := make([]int, 5)
 		copy(targets, entities)
-
 		targets = slices.Delete(targets, 0, i+1)
 
 		match := FindMatches(e, targets)
-
 		if best_match < match {
 			best_match = match
 		}
